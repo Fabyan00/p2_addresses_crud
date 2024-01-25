@@ -5,7 +5,7 @@ class TitleWidget extends StatelessWidget {
   const TitleWidget({
     super.key,
     required this.text,
-    this.fontSize = 18,
+    this.fontSize = 20,
     this.fontColor = const Color.fromARGB(255, 200, 200, 200)
   });
 
@@ -19,8 +19,8 @@ class TitleWidget extends StatelessWidget {
       text, 
       style: GoogleFonts.raleway(
         textStyle: TextStyle(
-          fontSize: 15,
-          color: fontColor
+          fontSize: fontSize,
+          color: fontColor,
         )  
       )
     );

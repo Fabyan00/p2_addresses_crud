@@ -19,7 +19,7 @@ class BodyWidget extends StatelessWidget {
       text, 
       style: GoogleFonts.raleway(
         textStyle: TextStyle(
-          fontSize: 15,
+          fontSize: fontSize,
           color: fontColor
         )  
       )

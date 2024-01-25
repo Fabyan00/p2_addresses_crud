@@ -15,7 +15,7 @@ class MainActionButton extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.black54
+        color: Colors.black
       ),
       child: TextButton(
         onPressed: action, 
