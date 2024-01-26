@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:p2_address_crud/pages/home/components/main_appbar.dart';
-import 'package:p2_address_crud/pages/home/home.dart';
-import 'package:p2_address_crud/pages/shared/title_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:p2_address_crud/domain/address_usecase.dart';
+import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
+import 'package:p2_address_crud/presentation/pages/home/home.dart';
+import 'package:p2_address_crud/presentation/pages/shared/title_widget.dart';
+
+// SQLITE TUTO
+// https://www.dhiwise.com/post/a-walkthrough-with-flutter-databases-sqlite-and-local
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (_) => PlaceBloc()),
+    ],
+    child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,9 +28,9 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-      title: TitleWidget(text: "Agenda de Direcciones"),
-      backgroundColor: const Color.fromARGB(255, 214, 214, 214),
-    ),
+          title: const TitleWidget(text: "Agenda de Direcciones", fontColor: Colors.black),
+          backgroundColor: AdressUsecase().mainColor
+        ),
         body: const Home(),
       )
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:p2_address_crud/pages/shared/body_widget.dart';
+import 'package:p2_address_crud/presentation/pages/shared/body_widget.dart';
 
 class MainActionButton extends StatelessWidget {
   MainActionButton({super.key, this.width = 200, this.height = 50, required this.text, required this.action});
