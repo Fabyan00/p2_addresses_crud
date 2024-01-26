@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
 import 'package:p2_address_crud/presentation/pages/shared/alert_dialog_widget.dart';
 
@@ -18,6 +19,8 @@ class AdressUsecase{
 
   final TextEditingController _zip = TextEditingController();
   TextEditingController get zip => _zip;
+
+  List<AddressModel> data = [];
 
   String validateForm(AdressUsecase usecase){
     if(usecase.address.text.isEmpty || usecase.city.text.isEmpty || usecase.zip.text.isEmpty){

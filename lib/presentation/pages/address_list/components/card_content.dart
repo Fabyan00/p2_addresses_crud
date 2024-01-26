@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/pages/address_form/new_adress_form.dart';
 import 'package:p2_address_crud/presentation/pages/shared/body_widget.dart';
@@ -6,12 +7,12 @@ import 'package:p2_address_crud/presentation/pages/shared/body_widget.dart';
 class CardContent extends StatelessWidget {
   const CardContent({
     super.key,
-    required this.date,
-    required this.addressUsecase
+    required this.addressUsecase,
+    required this.model
   });
 
-  final DateTime date;
   final AdressUsecase addressUsecase;
+  final AddressModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class CardContent extends StatelessWidget {
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: const BodyWidget(text: "Texto Prueba largo", fontSize: 15,)
+              child: BodyWidget(text: model.address, fontSize: 15,)
             ),
             InkWell(
               onTap: () {},
@@ -45,7 +46,7 @@ class CardContent extends StatelessWidget {
             Container(
               alignment: Alignment.centerRight,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: BodyWidget(text: "${date.day}/${date.month}/${date.year}", fontSize: 15,),
+              child: BodyWidget(text: model.dateUpdated, fontSize: 15,),
             ),
             InkWell(
               onTap: () {

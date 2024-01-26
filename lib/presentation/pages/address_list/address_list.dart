@@ -14,9 +14,9 @@ class AdressList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      height: 595,
+      height: 530,
       width: double.maxFinite,
-      child: ListView.builder(itemCount: 5, itemBuilder:(context, index) => CardItem(id: index, addressUsecase: addressUsecase,)),
+      child: ListView.builder(itemCount: addressUsecase.data.length, itemBuilder:(context, index) => CardItem(index: index, addressUsecase: addressUsecase,)),
     );
   }
 }
