@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
 import 'package:p2_address_crud/presentation/pages/shared/alert_dialog_widget.dart';
@@ -14,20 +15,24 @@ class AdressUsecase{
   final TextEditingController _address = TextEditingController();
   TextEditingController get address => _address;
 
-  final TextEditingController _city = TextEditingController();
-  TextEditingController get city => _city;
-
   final TextEditingController _zip = TextEditingController();
   TextEditingController get zip => _zip;
 
   List<AddressModel> data = [];
 
+  String country = "";
+  String state = "";
+  String city = "";
+
   String validateForm(AdressUsecase usecase){
-    if(usecase.address.text.isEmpty || usecase.city.text.isEmpty || usecase.zip.text.isEmpty){
+    if(usecase.address.text.isEmpty || usecase.country.isEmpty || usecase.zip.text.isEmpty){
       return "Completa todos los campos!";
     }
     if(usecase.alias.text.isEmpty){
       return "Agrega un alias para identificar tu dirección!";
+    }
+    if(usecase.zip.text.length != 5){
+      return "Código postal invalido, revisa e intenta de nuevo";
     }
     return "";
   }
@@ -76,6 +81,37 @@ class AdressUsecase{
     }
   }
 
+//GEOLOCATOR AND FLUTTER GEOCODER NOT WORKING
+
+//   Future<void> getLocationInfo() async {
+//   try {
+//     // Get the current position
+//     Position position = await Geolocator.getCurrentPosition(
+//         desiredAccuracy: LocationAccuracy.best);
+
+//     // Get the address details using reverse geocoding
+//     List placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+
+//     // Extract address details
+//     String country = placemarks[0].country ?? '';
+//     String state = placemarks[0].administrativeArea ?? '';
+//     String city = placemarks[0].locality ?? '';
+//     String address = placemarks[0].street ?? '';
+//     double latitude = position.latitude;
+//     double longitude = position.longitude;
+
+//     // Print or use the obtained information
+//     print('Latitude: $latitude');
+//     print('Longitude: $longitude');
+//     print('Country: $country');
+//     print('State: $state');
+//     print('City: $city');
+//     print('Address: $address');
+//   } catch (e) {
+//     print('Error obtaining location information: $e');
+//   }
+// }
+
 //   void getPlace() async {
 //     List<Placemark> newPlace = await placemarkFromCoordinates(52.2165157, 6.9437819);
 
@@ -92,6 +128,8 @@ class AdressUsecase{
 //   print(address);
 
 // }
+
+
 
   void showAlert(BuildContext context, Widget content, double height) {
     showDialog(

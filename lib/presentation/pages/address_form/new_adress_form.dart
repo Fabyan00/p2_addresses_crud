@@ -2,23 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
+import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
-import 'package:p2_address_crud/presentation/pages/home/home.dart';
+import 'package:p2_address_crud/presentation/pages/address_form/components/country_state_city_input.dart';
 import 'package:p2_address_crud/presentation/pages/shared/input_number_widget.dart';
 import 'package:p2_address_crud/presentation/pages/shared/input_text_widget.dart';
 import 'package:p2_address_crud/presentation/pages/shared/main_action_button.dart';
 import 'package:p2_address_crud/presentation/pages/shared/title_widget.dart';
-import 'package:sqflite/sqflite.dart';
 
 class NewAdressForm extends StatelessWidget {
   const NewAdressForm(
-      {super.key, required this.addressUsecase, required this.isEditMode});
+      {super.key,
+      required this.addressUsecase,
+      required this.isEditMode,
+      required this.addressModel});
 
   final AdressUsecase addressUsecase;
   final bool isEditMode;
+  final AddressModel addressModel;
 
   @override
   Widget build(BuildContext context) {
+    int id = 0;
+    if (isEditMode) {
+      id = addressModel.id;
+      addressUsecase.alias.text = addressModel.alias;
+      addressUsecase.country = addressModel.country;
+      addressUsecase.state = addressModel.state;
+      addressUsecase.city = addressModel.city;
+      addressUsecase.address.text = addressModel.address;
+      addressUsecase.zip.text = addressModel.zip;
+    }
     return Material(
       child: Scaffold(
         appBar: AppBar(
@@ -28,25 +42,10 @@ class NewAdressForm extends StatelessWidget {
           ),
           backgroundColor: const Color.fromARGB(255, 214, 214, 214),
         ),
-        body: BlocConsumer<SqliteManagerBloc, SqliteManagerState>(
-          listener: (context, state) {
-            if(state is SucceedCreatingElementState){
-              Navigator.pop(context);
-              addressUsecase.showAlert(
-                context, 
-                Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TitleWidget(text: state.message, fontColor: Colors.black,),
-                      const SizedBox(height: 10,),
-                      const CircularProgressIndicator(color: Colors.black,),
-                    ],
-                  ),
-                ), 
-                200
-              );
-              BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
+        body: BlocConsumer<PlaceBloc, PlaceState>(
+          listener: (context, state) async {
+            if(state is SucceedSettingPlace){
+            
             }
           },
           builder: (context, state) {
@@ -58,48 +57,68 @@ class NewAdressForm extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    MainActionButton(
-                        text: "Usar mi ubicación",
-                        action: () {
-                          // addressUsecase.getPlace();
-                        }),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    InputTextWidget(
-                      controller: addressUsecase.alias,
-                      hintText: "Alias",
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    InputTextWidget(
-                      controller: addressUsecase.address,
-                      hintText: "Dirección",
+                    Visibility(
+                      visible: !isEditMode,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          MainActionButton(
+                              text: "Usar mi ubicación",
+                              action: () async {
+                                  addressUsecase.getUserLocation(context);
+                              }),
+                        ],
+                      ),
                     ),
                     const SizedBox(
-                      height: 20,
-                    ),
-                    InputTextWidget(
-                      controller: addressUsecase.city,
-                      hintText: "Ciudad",
-                    ),
-                    const SizedBox(
-                      height: 20,
+                      height: 25,
                     ),
                     Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 45),
-                        alignment: Alignment.centerLeft,
-                        child: InputNumberWidget(
-                          controller: addressUsecase.zip,
-                          hintText: "Código Postal",
-                          width: 200,
-                        )),
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: InputTextWidget(
+                        controller: addressUsecase.alias,
+                        hintText: "Alias",
+                        height: 45,
+                      ),
+                    ),
                     const SizedBox(
-                      height: 100,
+                      height: 25,
+                    ),
+                    CountryStateInput(addressUsecase: addressUsecase),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: InputTextWidget(
+                            controller: addressUsecase.address,
+                            hintText: "Dirección",
+                            width: 200,
+                            height: 45,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                            alignment: Alignment.centerLeft,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: InputNumberWidget(
+                              controller: addressUsecase.zip,
+                              hintText: "Código Postal",
+                              width: 150,
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 200,
                     ),
                     MainActionButton(
                         text: isEditMode ? "Modificar" : "Guardar",
@@ -131,11 +150,28 @@ class NewAdressForm extends StatelessWidget {
                                 )),
                                 200);
                           } else {
-                            createAddress(context, addressUsecase);
+                            createAddress(
+                                context, addressUsecase, id, isEditMode);
                           }
                         }),
+                    Visibility(
+                      visible: isEditMode,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          MainActionButton(
+                              text: "Eliminar",
+                              action: () {
+                                BlocProvider.of<SqliteManagerBloc>(context)
+                                    .add(DeleteElementEvent(id, true));
+                              }),
+                        ],
+                      ),
+                    ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     MainActionButton(
                         text: "Cancelar", action: () => Navigator.pop(context)),
@@ -153,15 +189,22 @@ class NewAdressForm extends StatelessWidget {
   }
 }
 
-void createAddress(BuildContext context, AdressUsecase addressUsecase) {
+void createAddress(BuildContext context, AdressUsecase addressUsecase, int id,
+    bool isEditMode) {
   AddressModel model = AddressModel(
-      id: 0,
-      country: "Mexico",
+      id: id,
+      alias: addressUsecase.alias.text,
+      country: addressUsecase.country,
       address: addressUsecase.address.text,
-      city: addressUsecase.city.text,
-      state: "Mexico",
+      city: addressUsecase.city,
+      state: addressUsecase.state,
       zip: addressUsecase.zip.text,
       dateCreated: "",
       dateUpdated: "");
-  BlocProvider.of<SqliteManagerBloc>(context).add(CreateElementEvent(model));
+
+  if (isEditMode) {
+    BlocProvider.of<SqliteManagerBloc>(context).add(UpdateElementEvent(model));
+  } else {
+    BlocProvider.of<SqliteManagerBloc>(context).add(CreateElementEvent(model));
+  }
 }

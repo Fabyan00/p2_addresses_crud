@@ -19,5 +19,22 @@ class CreateElementEvent extends SqliteManagerEvent{
   const CreateElementEvent(this.addressModel);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [addressModel];
+}
+
+class UpdateElementEvent extends SqliteManagerEvent{
+  final AddressModel addressModel;
+
+  const UpdateElementEvent(this.addressModel);
+
+  @override
+  List<Object> get props => [addressModel];
+}
+
+class DeleteElementEvent extends SqliteManagerEvent{
+  final int id;
+  final bool isFromModifyScreen;
+  const DeleteElementEvent(this.id, this.isFromModifyScreen);
+  @override
+  List<Object> get props => [id, isFromModifyScreen];
 }

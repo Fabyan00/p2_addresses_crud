@@ -29,14 +29,36 @@ class CardDetails extends StatelessWidget {
                 const SizedBox(height: 20,),
                 const TitleWidget(text: "Detalles:", fontSize: 20, fontColor: Colors.black,),
                 const SizedBox(height: 10,),
-                BodyWidget(text: addressModel.address, fontColor: Colors.black,),
-                const SizedBox(height: 40,),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BodyWidget(text: "Alias: " + addressModel.alias, fontColor: Colors.black,),
+                      const SizedBox(height: 10,),
+                      BodyWidget(text: "País: " + addressModel.country, fontColor: Colors.black,),
+                      const SizedBox(height: 10,),
+                      BodyWidget(text: "Estado: " + addressModel.state, fontColor: Colors.black,),
+                      const SizedBox(height: 10,),
+                      BodyWidget(text: "Ciudad: " + addressModel.city, fontColor: Colors.black,),
+                      const SizedBox(height: 10,),
+                      BodyWidget(text: "Dirección: " + addressModel.address, fontColor: Colors.black,),
+                      const SizedBox(height: 10,),
+                      BodyWidget(text: "Código Postal: " + addressModel.zip, fontColor: Colors.black,),
+                      const SizedBox(height: 10,),
+                      BodyWidget(text: "Guardado: " + addressModel.dateCreated, fontColor: Colors.black,),
+                      const SizedBox(height: 10,),
+                      BodyWidget(text: "Actualizado: " + addressModel.dateUpdated, fontColor: Colors.black,),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30,),
                 MainActionButton(
                   text: "Modificar",
                   action: () {  
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NewAdressForm(addressUsecase: addressUsecase, isEditMode: true,)),
+                      MaterialPageRoute(builder: (context) => NewAdressForm(addressUsecase: addressUsecase, isEditMode: true, addressModel: addressModel,)),
                     );
                   },
                 ),

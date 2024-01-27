@@ -59,3 +59,24 @@ class SucceedCreatingElementState extends SqliteManagerState{
   @override 
   List<Object> get props => [message, date];
 }
+
+class SucceedUpdatingElementState extends SqliteManagerState{
+  final String message;
+  final DateTime date;
+
+  const SucceedUpdatingElementState(this.message, this.date);
+
+  @override 
+  List<Object> get props => [message, date];
+}
+
+class SucceedDeletingElementState extends SqliteManagerState{
+  final String message;
+  final DateTime date;
+  final bool isFromModifyScreen;
+
+  const SucceedDeletingElementState(this.message, this.date, this.isFromModifyScreen);
+
+  @override 
+  List<Object> get props => [message, date, isFromModifyScreen];
+}

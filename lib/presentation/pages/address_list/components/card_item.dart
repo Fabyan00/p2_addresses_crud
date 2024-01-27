@@ -19,7 +19,7 @@ class CardItem extends StatelessWidget {
           addressUsecase.showAlert(
             context,
             CardDetails(addressUsecase: addressUsecase, addressModel: addressUsecase.data[index]),
-            350
+            500
           );
         },
         child: Container(
@@ -27,10 +27,10 @@ class CardItem extends StatelessWidget {
           height: 85, 
           width: 150,
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 67, 67, 67),
-            borderRadius: BorderRadius.circular(10)
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(width: 1, color: const Color.fromARGB(255, 67, 67, 67),)
           ),
-          child: CardContent(addressUsecase: addressUsecase, model: addressUsecase.data[index],),
+          child: CardContent(addressUsecase: addressUsecase, addressModel: addressUsecase.data[index],),
         ),
       ),
     );

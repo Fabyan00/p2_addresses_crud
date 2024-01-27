@@ -1,5 +1,7 @@
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
 import 'package:p2_address_crud/presentation/pages/address_form/new_adress_form.dart';
@@ -24,6 +26,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     AdressUsecase adressUsecase = AdressUsecase();
+    AddressModel addressModel = const AddressModel(id: 0, alias: "", country: "", state: "", city: "", address: "", zip: "", dateCreated: "", dateUpdated: "");
     return BlocConsumer<SqliteManagerBloc, SqliteManagerState>(
       listener: (context, state) {
         manageDataBaseResponse(context, state, adressUsecase);
@@ -44,14 +47,17 @@ class _HomeState extends State<Home> {
                   height: 10,
                 ),
                 adressUsecase.data.isEmpty ?
-                const Column(
-                  children: [
-                    SizedBox(height: 200,),
-                    TitleWidget(text: "No has guardado ninguna dirección aún", fontColor: Colors.black, fontSize: 15,),
-                    SizedBox(height: 25,),
-                    Icon(Icons.sentiment_neutral_outlined, size: 50,),
-                    SizedBox(height: 250,)
-                  ]
+                Container(
+                  alignment: Alignment.center,
+                  child: const Column(
+                    children: [
+                      SizedBox(height: 200,),
+                      TitleWidget(text: "No has guardado ninguna dirección aún", fontColor: Colors.black, fontSize: 15,),
+                      SizedBox(height: 25,),
+                      Icon(Icons.sentiment_neutral_outlined, size: 50,),
+                      SizedBox(height: 250,)
+                    ]
+                  ),
                 )
                 : 
                 AdressList(
@@ -60,6 +66,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 20,
                 ),
+                	
                 MainActionButton(
                     text: "Nueva Dirección",
                     action: () {
@@ -67,9 +74,10 @@ class _HomeState extends State<Home> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => NewAdressForm(
-                                  addressUsecase: adressUsecase,
-                                  isEditMode: false,
-                                )),
+                              addressModel: addressModel,
+                              addressUsecase: adressUsecase,
+                              isEditMode: false,
+                            )),
                       );
                     })
               ],
@@ -98,14 +106,94 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
       200
     );
     print("Loading!");
-  }else if(state is SucceedInitializingDataBaseState){
+  }
+  if(state is SucceedInitializingDataBaseState){
     Navigator.pop(context);
     adressUsecase.data = state.modelList;
     print("SUCCESS");
     print(state.message);
-  }else if(state is SucceedFetchingDataState){
+  }
+
+  if(state is SucceedCreatingElementState){
+    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+    adressUsecase.showAlert(
+      context, 
+      Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TitleWidget(text: state.message, fontColor: Colors.black,),
+            const SizedBox(height: 10,),
+            MainActionButton(
+              text: "Aceptar", 
+              action: (){
+              Navigator.pop(context);
+            })
+          ],
+        ),
+      ), 
+      200
+    );
+    BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
+  }
+
+  if(state is SucceedFetchingDataState){
+    Navigator.pop(context);
     adressUsecase.data = state.modelList;
-  }else if(state is FailedInitializingDataBaseState){
+  } 
+
+  if(state is SucceedUpdatingElementState){
+    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+    adressUsecase.showAlert(
+      context, 
+      Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TitleWidget(text: state.message, fontColor: Colors.black,),
+            const SizedBox(height: 10,),
+            MainActionButton(
+              text: "Aceptar", 
+              action: (){
+              Navigator.pop(context);
+            })
+          ],
+        ),
+      ), 
+      200
+    );
+    BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
+  }
+
+  if(state is SucceedDeletingElementState){
+    if(state.isFromModifyScreen){
+      Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+    }else{
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+    adressUsecase.showAlert(
+      context, 
+      Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TitleWidget(text: state.message, fontColor: Colors.black,),
+            const SizedBox(height: 10,),
+            MainActionButton(
+              text: "Aceptar", 
+              action: (){
+              Navigator.pop(context);
+            })
+          ],
+        ),
+      ), 
+      200
+    );
+    BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
+  }
+
+  if(state is FailedInitializingDataBaseState){
     print("ERROR");
     print(state.message);
   }
