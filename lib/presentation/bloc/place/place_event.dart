@@ -10,22 +10,23 @@ sealed class PlaceEvent extends Equatable {
 class SetLoadingEvent extends PlaceEvent{}
 
 class SetPlaceEvent extends PlaceEvent{
-    final String lat;
-    final String lon;
-    final String place;
-    const SetPlaceEvent(this.lat, this.lon, this.place);
+    final String country;
+    final String state;
+    final String city;
+    final String address;
+    final String zip;
+    const SetPlaceEvent(this.country, this.state, this.city, this.address, this.zip);
 
     @override
-    List<Object> get props => [lat, lon, place];
+    List<Object> get props => [country, state, city, address, zip];
 }
 
 class SetErrorPlaceEvent extends PlaceEvent{
     final String message;
-    final String place;
-    const SetErrorPlaceEvent(this.message, this.place);
+    const SetErrorPlaceEvent(this.message);
 
     @override
-    List<Object> get props => [message, place];
+    List<Object> get props => [message];
 }
 
 class SetErrorLocationEvent extends PlaceEvent{

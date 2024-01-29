@@ -44,9 +44,7 @@ class NewAdressForm extends StatelessWidget {
         ),
         body: BlocConsumer<PlaceBloc, PlaceState>(
           listener: (context, state) async {
-            if(state is SucceedSettingPlace){
-            
-            }
+            manageUserLocationResponse(context, state, addressUsecase);
           },
           builder: (context, state) {
             return Container(
@@ -57,20 +55,17 @@ class NewAdressForm extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Visibility(
-                      visible: !isEditMode,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          MainActionButton(
-                              text: "Usar mi ubicación",
-                              action: () async {
-                                  addressUsecase.getUserLocation(context);
-                              }),
-                        ],
-                      ),
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        MainActionButton(
+                            text: "Usar mi ubicación",
+                            action: () async {
+                                addressUsecase.getLocationInfo(context);
+                            }),
+                      ],
                     ),
                     const SizedBox(
                       height: 25,
@@ -81,13 +76,13 @@ class NewAdressForm extends StatelessWidget {
                       child: InputTextWidget(
                         controller: addressUsecase.alias,
                         hintText: "Alias",
-                        height: 45,
+                        height: 50,
                       ),
                     ),
                     const SizedBox(
                       height: 25,
                     ),
-                    CountryStateInput(addressUsecase: addressUsecase),
+                    CountryStateCityInput(addressUsecase: addressUsecase),
                     const SizedBox(
                       height: 25,
                     ),
@@ -101,7 +96,7 @@ class NewAdressForm extends StatelessWidget {
                             controller: addressUsecase.address,
                             hintText: "Dirección",
                             width: 200,
-                            height: 45,
+                            height: 50,
                           ),
                         ),
                         const SizedBox(
@@ -114,6 +109,7 @@ class NewAdressForm extends StatelessWidget {
                               controller: addressUsecase.zip,
                               hintText: "Código Postal",
                               width: 150,
+                              height: 50,
                             )),
                       ],
                     ),
@@ -162,11 +158,34 @@ class NewAdressForm extends StatelessWidget {
                             height: 10,
                           ),
                           MainActionButton(
-                              text: "Eliminar",
-                              action: () {
-                                BlocProvider.of<SqliteManagerBloc>(context)
-                                    .add(DeleteElementEvent(id, true));
-                              }),
+                            text: "Eliminar",
+                            action: () {
+                              addressUsecase.showAlert(
+                                context, 
+                                Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const TitleWidget(text: "¿Seguro que desea eliminar esta dirección?", fontColor: Colors.black,),
+                                      const SizedBox(height: 10,),
+                                      MainActionButton(
+                                        text: "Eliminar", 
+                                        action: (){
+                                        BlocProvider.of<SqliteManagerBloc>(context).add(DeleteElementEvent(addressModel.id, false));
+                                      }),
+                                      const SizedBox(height: 10,),
+                                      MainActionButton(
+                                        text: "Cancelar", 
+                                        action: (){
+                                        Navigator.pop(context);
+                                      })
+                                    ],
+                                  ),
+                                ), 
+                                200
+                              );
+                            }
+                          ),
                         ],
                       ),
                     ),
@@ -189,22 +208,95 @@ class NewAdressForm extends StatelessWidget {
   }
 }
 
-void createAddress(BuildContext context, AdressUsecase addressUsecase, int id,
-    bool isEditMode) {
+void createAddress(BuildContext context, AdressUsecase addressUsecase, int id, bool isEditMode) {
   AddressModel model = AddressModel(
-      id: id,
-      alias: addressUsecase.alias.text,
-      country: addressUsecase.country,
-      address: addressUsecase.address.text,
-      city: addressUsecase.city,
-      state: addressUsecase.state,
-      zip: addressUsecase.zip.text,
-      dateCreated: "",
-      dateUpdated: "");
+    id: id,
+    alias: addressUsecase.alias.text,
+    country: addressUsecase.country,
+    address: addressUsecase.address.text,
+    city: addressUsecase.city,
+    state: addressUsecase.state,
+    zip: addressUsecase.zip.text,
+    dateCreated: "",
+    dateUpdated: ""
+  );
 
   if (isEditMode) {
     BlocProvider.of<SqliteManagerBloc>(context).add(UpdateElementEvent(model));
   } else {
     BlocProvider.of<SqliteManagerBloc>(context).add(CreateElementEvent(model));
+  }
+}
+
+void manageUserLocationResponse(BuildContext context, PlaceState state, AdressUsecase adressUsecase){
+  if(state is LoadingState){
+    adressUsecase.showAlert(
+      context,
+      const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TitleWidget(text: "Obteniendo ubicación. . .", fontColor: Colors.black54,),
+            SizedBox(height: 10,),
+            CircularProgressIndicator(color: Colors.black54,),
+          ],
+        ),
+      ),
+      200
+    );
+  }
+  
+  if(state is SucceedSettingPlace){
+    Navigator.pop(context);
+    adressUsecase.country = state.country;
+    adressUsecase.state = state.state;
+    adressUsecase.city = state.city;
+    adressUsecase.address.text = state.address;
+    adressUsecase.zip.text = state.zip;
+  }
+
+  if(state is FailedSettingPlace){
+    // Navigator.pop(context);
+     adressUsecase.showAlert(
+      context,
+      Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TitleWidget(text: state.message, fontSize: 20, fontColor: Colors.black54,),
+            const SizedBox(height: 10,),
+            MainActionButton(
+              text: "Accept",
+              action: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        )
+      ),
+      200
+    );
+  }
+  
+  if(state is FailedSettingUserLocation){
+    adressUsecase.showAlert(
+      context,
+      Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TitleWidget(text: state.message, fontSize: 20, fontColor: Colors.black54,),
+            const SizedBox(height: 10,),
+            MainActionButton(
+              text: "Acceptar",
+              action: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        )
+      ),
+      200
+    );
   }
 }

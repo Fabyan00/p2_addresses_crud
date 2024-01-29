@@ -30,8 +30,7 @@ class SqliteManagerBloc extends Bloc<SqliteManagerEvent, SqliteManagerState> {
         emit(SucceedInitializingDataBaseState("Success", DateTime.now(), modelList));
         
       }catch(e){
-        print("Error en base de datos: ${e.toString}");
-        emit(FailedInitializingDataBaseState(e.toString(), DateTime.now()));
+        emit(FailedInitializingDataBaseState("Error en base de datos: ${e.toString()}", DateTime.now()));
       }
     });
 
@@ -50,7 +49,6 @@ class SqliteManagerBloc extends Bloc<SqliteManagerEvent, SqliteManagerState> {
         emit(SucceedCreatingElementState("Dirección Guardada!", DateTime.now()));
         
       }catch(e){
-        print("Error en base de datos: ${e.toString}");
         emit(FailedInitializingDataBaseState("No pudimos guardar la dirección: ${e.toString()}", DateTime.now()));
       }
     }); 
@@ -70,7 +68,6 @@ class SqliteManagerBloc extends Bloc<SqliteManagerEvent, SqliteManagerState> {
         emit(SucceedFetchingDataState(modelList, DateTime.now()));
         
       }catch(e){
-        print("Error en base de datos: ${e.toString}");
         emit(FailedInitializingDataBaseState("No pudimos cargar los datos: ${e.toString()}", DateTime.now()));
       }
     });
@@ -90,7 +87,6 @@ class SqliteManagerBloc extends Bloc<SqliteManagerEvent, SqliteManagerState> {
         emit(SucceedUpdatingElementState("Dirección Actualizada!", DateTime.now()));
         
       }catch(e){
-        print("Error en base de datos: ${e.toString}");
         emit(FailedInitializingDataBaseState("No pudimos actualizar la dirección: ${e.toString()}", DateTime.now()));
       }
     }); 
@@ -109,7 +105,6 @@ class SqliteManagerBloc extends Bloc<SqliteManagerEvent, SqliteManagerState> {
         emit(SucceedDeletingElementState("Dirección Borrada!", DateTime.now(), event.isFromModifyScreen));
         
       }catch(e){
-        print("Error en base de datos: ${e.toString}");
         emit(FailedInitializingDataBaseState("No pudimos eliminar la dirección: ${e.toString()}", DateTime.now()));
       }
     }); 

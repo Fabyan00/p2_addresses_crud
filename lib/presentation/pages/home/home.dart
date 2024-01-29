@@ -1,5 +1,5 @@
-import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
           width: double.maxFinite,
           child: RefreshIndicator(
             onRefresh: () async {
-              print("refresh");
+              BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -70,6 +70,7 @@ class _HomeState extends State<Home> {
                 MainActionButton(
                     text: "Nueva Dirección",
                     action: () {
+                      adressUsecase.cleanForm();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -105,16 +106,14 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
       ),
       200
     );
-    print("Loading!");
   }
   if(state is SucceedInitializingDataBaseState){
     Navigator.pop(context);
     adressUsecase.data = state.modelList;
-    print("SUCCESS");
-    print(state.message);
   }
 
   if(state is SucceedCreatingElementState){
+    adressUsecase.cleanForm();
     Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
     adressUsecase.showAlert(
       context, 
@@ -166,6 +165,7 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
   }
 
   if(state is SucceedDeletingElementState){
+    adressUsecase.cleanForm();
     if(state.isFromModifyScreen){
       Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
     }else{
@@ -194,7 +194,23 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
   }
 
   if(state is FailedInitializingDataBaseState){
-    print("ERROR");
-    print(state.message);
+    adressUsecase.showAlert(
+      context, 
+      Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TitleWidget(text: state.message, fontColor: Colors.black,),
+            const SizedBox(height: 10,),
+            MainActionButton(
+              text: "Aceptar", 
+              action: (){
+              SystemNavigator.pop();
+            })
+          ],
+        ),
+      ), 
+      200
+    );
   }
 }

@@ -11,7 +11,8 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
     });
 
     on<SetPlaceEvent>((event, emit) {
-      emit(SucceedSettingPlace(double.parse(event.lat), double.parse(event.lon), event.place));
+      emit(LoadingState());
+      emit(SucceedSettingPlace(event.country, event.state, event.city, event.address, event.zip));
     });
 
     on<SetErrorPlaceEvent>((event, emit) {

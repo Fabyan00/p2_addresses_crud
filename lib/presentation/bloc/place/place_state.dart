@@ -12,14 +12,16 @@ final class PlaceInitial extends PlaceState {}
 final class LoadingState extends PlaceState{}
 
 final class SucceedSettingPlace extends PlaceState{
-  final double lat;
-  final double lon;
-  final String place;
+  final String country;
+  final String state;
+  final String city;
+  final String address;
+  final String zip;
 
-  const SucceedSettingPlace(this.lat, this.lon, this.place);
+  const SucceedSettingPlace(this.country, this.state, this.city, this.address, this.zip);
 
   @override 
-  List<Object> get props => [lat, lon, place];
+  List<Object> get props => [country, state, city, address, zip];
 }
 
 final class FailedSettingPlace extends PlaceState{
