@@ -1,6 +1,5 @@
 import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 
@@ -19,7 +18,11 @@ class CountryStateCityInput extends StatelessWidget {
            fontSize: 15,)  
          ),
          currentCountry: "Mexico",
+         currentState: "Mexico City",
          flagState: CountryFlag.DISABLE,
+         countrySearchPlaceholder: "Buscar País",
+         stateSearchPlaceholder: "Buscar Estado",
+         citySearchPlaceholder: "Buscar Ciudad",
          countryDropdownLabel: addressUsecase.country.isEmpty ? "País" : addressUsecase.country,
          stateDropdownLabel: addressUsecase.state.isEmpty ? "Estado" : addressUsecase.state,
          cityDropdownLabel: addressUsecase.city.isEmpty ? "Ciudad" : addressUsecase.city,

@@ -21,10 +21,10 @@ class AdressUsecase{
   List<AddressModel> data = [];
 
   String country = "Mexico";
-  String state = "";
+  String state = "Mexico City";
   String city = "";
 
-  String validateForm(AdressUsecase usecase){
+  String validateForm(BuildContext context, AdressUsecase usecase){
     if(usecase.address.text.isEmpty || usecase.country.isEmpty || usecase.zip.text.isEmpty){
       return "Completa todos los campos!";
     }
@@ -77,7 +77,7 @@ class AdressUsecase{
       return Future.error('Los permisos de ubicación fueron denegados temporalmente. Ve a configuración para modificarlo.');
     } 
     if(!context.mounted) return Future.error("No context"); 
-    getLocationInfo(context);
+    // getLocationInfo(context);
     return await Geolocator.getCurrentPosition();
   }
 
