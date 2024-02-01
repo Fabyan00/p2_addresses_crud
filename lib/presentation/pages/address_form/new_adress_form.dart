@@ -1,13 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
+import 'package:p2_address_crud/presentation/cubit/cities_drop_down/cities_dropdown_cubit.dart';
 import 'package:p2_address_crud/presentation/cubit/form_validator/form_validator_cubit.dart';
 import 'package:p2_address_crud/presentation/pages/address_form/components/country_state_city_input.dart';
+import 'package:p2_address_crud/presentation/pages/address_form/components/edomx_cities_dropdown.dart';
+import 'package:p2_address_crud/presentation/pages/address_form/components/mx_cities_dropdown.dart';
 import 'package:p2_address_crud/presentation/pages/shared/input_number_widget.dart';
 import 'package:p2_address_crud/presentation/pages/shared/input_text_widget.dart';
 import 'package:p2_address_crud/presentation/pages/shared/main_action_button.dart';
@@ -28,6 +31,7 @@ class NewAdressForm extends StatelessWidget {
   Widget build(BuildContext context) {
     int id = 0;
     if (isEditMode) {
+      print(addressModel.country);
       id = addressModel.id;
       addressUsecase.alias.text = addressModel.alias;
       addressUsecase.country = addressModel.country;
@@ -52,12 +56,12 @@ class NewAdressForm extends StatelessWidget {
           builder: (context, state) {
             return BlocConsumer<FormValidatorCubit, FormValidatorState>(
               listener: (context, state) {
-                if(state is InputCheckedState){
+                if (state is InputCheckedState) {
                   if (state.message.isNotEmpty) {
                     addressUsecase.showAlert(
-                      context,
-                      Center(
-                        child: Column(
+                        context,
+                        Center(
+                            child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TitleWidget(
@@ -75,59 +79,95 @@ class NewAdressForm extends StatelessWidget {
                               },
                             ),
                           ],
-                        )
-                      ),
-                      200
-                    );
+                        )),
+                        200);
                   }
-                }else if(state is AprovedFormState){
+                } else if (state is AprovedFormState) {
                   createAddress(context, addressUsecase, id, isEditMode);
                 }
               },
               builder: (context, state) {
-                return Container(
-                  color: const Color.fromARGB(255, 214, 214, 214),
-                  height: double.maxFinite,
-                  width: double.maxFinite,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Column(
+                return BlocConsumer<CitiesDropdownCubit, CitiesDropdownState>(
+                  listener: (context, state) {
+                    if(state is CountryChangedState){
+                      addressUsecase.country = state.country;
+                    }
+                    if(state is StateChangedState){
+                      addressUsecase.state = state.state;
+                      if(addressUsecase.state == "Mexico City"){
+                        addressUsecase.city = addressUsecase.mxCitiesList.first;
+                      }else if(addressUsecase.state == "México"){
+                        addressUsecase.city = addressUsecase.edoMxCitiesList.first;
+                      }
+                    }
+                    if(state is MxCityChangedState ){
+                      addressUsecase.city = state.city;
+                    }
+                  },
+                  builder: (context, state) {
+                    return Container(
+                      color: const Color.fromARGB(255, 214, 214, 214),
+                      height: double.maxFinite,
+                      width: double.maxFinite,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(
-                              height: 20,
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                MainActionButton(
+                                    text: "Usar mi ubicación",
+                                    action: () async {
+                                      addressUsecase.getLocationInfo(context);
+                                    }),
+                              ],
                             ),
-                            MainActionButton(
-                                text: "Usar mi ubicación",
-                                action: () async {
-                                  addressUsecase.getLocationInfo(context);
-                                }),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: InputTextWidget(
-                            controller: addressUsecase.alias,
-                            hintText: "Alias",
-                            height: 45,
-                            width: double.maxFinite,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        CountryStateCityInput(addressUsecase: addressUsecase),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: InputTextWidget(
+                                controller: addressUsecase.alias,
+                                hintText: "Alias",
+                                height: 45,
+                                width: double.maxFinite,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            CountryStateCityInput(
+                                addressUsecase: addressUsecase),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            addressUsecase.state == "Mexico City"
+                                ? MxCitiesDropDown(
+                                    addressUsecase: addressUsecase)
+                                : addressUsecase.state == "México"
+                                    ? EdoMxCitiesDropDown(
+                                        addressUsecase: addressUsecase)
+                                    : 
+                                    Container(
+                                        alignment: Alignment.centerLeft,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: InputTextWidget(
+                                          controller: addressUsecase.otherCity,
+                                          hintText: "Ciudad",
+                                          height: 45,
+                                          width: double.maxFinite,
+                                        ),
+                                      ),
+                            const SizedBox(
+                              height: 25,
+                            ),
                             Container(
                               alignment: Alignment.centerLeft,
                               margin:
@@ -135,92 +175,97 @@ class NewAdressForm extends StatelessWidget {
                               child: InputTextWidget(
                                 controller: addressUsecase.address,
                                 hintText: "Dirección",
-                                width: 220,
                                 height: 45,
+                                width: double.maxFinite,
                               ),
+                            ),
+                            const SizedBox(
+                              height: 25,
                             ),
                             Container(
                                 alignment: Alignment.centerLeft,
-                                margin: const EdgeInsets.symmetric(horizontal: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: InputNumberWidget(
                                   controller: addressUsecase.zip,
                                   hintText: "Código Postal",
-                                  width: 130,
+                                  width: 150,
                                   height: 45,
                                 )),
+                            const SizedBox(
+                              height: 100,
+                            ),
+                            MainActionButton(
+                                text: isEditMode ? "Modificar" : "Guardar",
+                                action: () {
+                                  BlocProvider.of<FormValidatorCubit>(context).validateInput(addressUsecase);
+                                }),
+                            Visibility(
+                              visible: isEditMode,
+                              child: Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  MainActionButton(
+                                      text: "Eliminar",
+                                      action: () {
+                                        addressUsecase.showAlert(
+                                            context,
+                                            Center(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const TitleWidget(
+                                                    text:
+                                                        "¿Seguro que desea eliminar esta dirección?",
+                                                    fontColor: Colors.black,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  MainActionButton(
+                                                      text: "Eliminar",
+                                                      action: () {
+                                                        BlocProvider.of<
+                                                                    SqliteManagerBloc>(
+                                                                context)
+                                                            .add(
+                                                                DeleteElementEvent(
+                                                                    addressModel
+                                                                        .id,
+                                                                    false));
+                                                      }),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  MainActionButton(
+                                                      text: "Cancelar",
+                                                      action: () {
+                                                        Navigator.pop(context);
+                                                      })
+                                                ],
+                                              ),
+                                            ),
+                                            200);
+                                      }),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            MainActionButton(
+                                text: "Cancelar",
+                                action: () => Navigator.pop(context)),
+                            const SizedBox(
+                              height: 20,
+                            ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 200,
-                        ),
-                        MainActionButton(
-                            text: isEditMode ? "Modificar" : "Guardar",
-                            action: () {
-                              BlocProvider.of<FormValidatorCubit>(context).validateInput(addressUsecase);
-                            
-                            }),
-                        Visibility(
-                          visible: isEditMode,
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              MainActionButton(
-                                  text: "Eliminar",
-                                  action: () {
-                                    addressUsecase.showAlert(
-                                        context,
-                                        Center(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const TitleWidget(
-                                                text:
-                                                    "¿Seguro que desea eliminar esta dirección?",
-                                                fontColor: Colors.black,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              MainActionButton(
-                                                  text: "Eliminar",
-                                                  action: () {
-                                                    BlocProvider.of<
-                                                                SqliteManagerBloc>(
-                                                            context)
-                                                        .add(DeleteElementEvent(
-                                                            addressModel.id,
-                                                            false));
-                                                  }),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              MainActionButton(
-                                                  text: "Cancelar",
-                                                  action: () {
-                                                    Navigator.pop(context);
-                                                  })
-                                            ],
-                                          ),
-                                        ),
-                                        200);
-                                  }),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        MainActionButton(
-                            text: "Cancelar",
-                            action: () => Navigator.pop(context)),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 );
               },
             );
@@ -231,18 +276,18 @@ class NewAdressForm extends StatelessWidget {
   }
 }
 
-void createAddress(BuildContext context, AdressUsecase addressUsecase, int id,
-    bool isEditMode) {
+void createAddress(BuildContext context, AdressUsecase addressUsecase, int id, bool isEditMode) {
   AddressModel model = AddressModel(
-      id: id,
-      alias: addressUsecase.alias.text,
-      country: addressUsecase.country,
-      address: addressUsecase.address.text,
-      city: addressUsecase.city,
-      state: addressUsecase.state,
-      zip: addressUsecase.zip.text,
-      dateCreated: "",
-      dateUpdated: "");
+    id: id,
+    alias: addressUsecase.alias.text,
+    country: addressUsecase.country,
+    address: addressUsecase.address.text,
+    city: addressUsecase.country != "Mexico" ? addressUsecase.otherCity.text : addressUsecase.city,
+    state: addressUsecase.country != "Mexico" ? "" : addressUsecase.state,
+    zip: addressUsecase.zip.text,
+    dateCreated: "",
+    dateUpdated: ""
+  );
 
   if (isEditMode) {
     BlocProvider.of<SqliteManagerBloc>(context).add(UpdateElementEvent(model));
@@ -278,8 +323,9 @@ void manageUserLocationResponse(
 
   if (state is SucceedSettingPlace) {
     Navigator.pop(context);
+    //Just for the specific csc package
     adressUsecase.country = state.country;
-    adressUsecase.state = state.state;
+    adressUsecase.state = state.state == "Ciudad de México" ? "Mexico City" : state.state;
     adressUsecase.city = state.city;
     adressUsecase.address.text = state.address;
     adressUsecase.zip.text = state.zip;

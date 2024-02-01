@@ -11,52 +11,85 @@ class FormValidatorCubit extends Cubit<FormValidatorState> {
     String status = "";
     String type = "";
 
-    if(usecase.zip.text.length != 5){
-      status = "Ingresa un código postal válido";
-      type= "zip";
+    if(usecase.country == "Mexico"){
+      if(usecase.zip.text.length != 5){
+        status = "Ingresa un código postal válido";
+        type= "zip";
+      }
+
+      if(usecase.zip.text.isEmpty){
+        status = "Ingresa un código postal";
+        type= "zip";
+      }
+
+      if(usecase.address.text.length < 6){
+        status = "Ingresa una dirección válida (min 6 caracteres)";
+        type= "address";
+      }
+
+      if(usecase.address.text.isEmpty){
+        status = "Ingresa una dirección";
+        type= "address";
+      }
+
+      if(usecase.city.isEmpty){
+        status = "Selecciona una ciudad";
+        type= "city";
+      } 
+
+      if(usecase.state.isEmpty){
+        status = "Selecciona un estado";
+        type= "state";
+      }
+
+      if(usecase.country.isEmpty){
+        status = "Selecciona un país";
+        type= "country";
+      }
+
+      if(usecase.alias.text.isEmpty){
+        status = "Agrega un alias para indentificar tu dirección";
+        type= "alias";
+      }
+    }else{
+      if(usecase.zip.text.length != 5){
+        status = "Ingresa un código postal válido";
+        type= "zip";
+      }
+
+      if(usecase.zip.text.isEmpty){
+        status = "Ingresa un código postal";
+        type= "zip";
+      }
+
+      if(usecase.address.text.length < 6){
+        status = "Ingresa una dirección válida (min 6 caracteres)";
+        type= "address";
+      }
+
+      if(usecase.address.text.isEmpty){
+        status = "Ingresa una dirección";
+        type= "address";
+      }
+
+      if(usecase.otherCity.text.isEmpty){
+        status = "Ingresa una ciudad";
+        type= "city";
+      } 
+
+      if(usecase.country.isEmpty){
+        status = "Selecciona un país";
+        type= "country";
+      }
+
+      if(usecase.alias.text.isEmpty){
+        status = "Agrega un alias para indentificar tu dirección";
+        type= "alias";
+      }
     }
 
-    if(usecase.zip.text.isEmpty){
-      status = "Ingresa un código postal";
-      type= "zip";
-    }
-
-    if(usecase.address.text.length < 6){
-      status = "Ingresa una dirección válida (min 6 caracteres)";
-      type= "address";
-    }
-
-    if(usecase.address.text.isEmpty){
-      status = "Ingresa una dirección";
-      type= "address";
-    }
-
-    if(usecase.city.isEmpty){
-      status = "Selecciona una ciudad";
-      type= "city";
-    } 
-
-    if(usecase.state.isEmpty){
-      status = "Selecciona un estado";
-      type= "state";
-    }
-
-    if(usecase.country.isEmpty){
-      status = "Selecciona un país";
-      type= "country";
-    }
-
-    if(usecase.alias.text.isEmpty){
-      status = "Agrega un alias para indentificar tu dirección";
-      type= "alias";
-    }
-
-    
-
-   
-   
     if(status.isEmpty){
-      emit(AprovedFormState());
+      emit(AprovedFormState(DateTime.now()));
     }else{
       emit(InputCheckedState(status, type, DateTime.now()));
     }

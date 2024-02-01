@@ -18,35 +18,56 @@ class AdressUsecase{
   final TextEditingController _zip = TextEditingController();
   TextEditingController get zip => _zip;
 
+  final TextEditingController _otherCity = TextEditingController();
+  TextEditingController get otherCity => _otherCity;
+
   List<AddressModel> data = [];
+
+  List<String> mxCitiesList = [
+    "Alvaro Obregon", "Azcapotzalco", "Benito Juarez", "Coyoacan", "Cuajimalpa de Morelos", "Cuauhtemoc", "Gustavo A. Madero", 
+    "Iztacalco", "Iztapalapa", "Magdalena Contreras", "Miguel Hidalgo", "Milpa Alta", "Tlahuac", "Tlalpan", "Venustiano Carranza",
+    "Xochimilco"
+  ];
+
+  List<String> edoMxCitiesList = [
+    "Acambay de Ruíz Castañeda", "Acolman", "Aculco", "Almoloya de Alquisiras", "Almoloya de Juárez", "Almoloya del Río", "Amanalco", "Amatepec" 
+    "Amecameca", "Apaxco", "Atenco", "Atizapán", "Atizapán de Zaragoza", "Atlacomulco", "Atlautla", "Axapusco", "Ayapango", "Calimaya", "Capulhuac",
+    "Coacalco de Berriozábal", "Coatepec Harinas", "Cocotitlán", "Coyotepec", "Cuautitlán", "Chalco", "Chapa de Mota", "Chapultepec", "Chiautla",
+    "Chicoloapan", "Chiconcuac", "Chimalhuacán", "Donato Guerra", "Ecatepec de Morelos", "Ecatzingo", "Huehuetoca", "Hueypoxtla", "Huixquilucan", 
+    "Ixtapaluca", "Ixtapan de la Sal", "Jaltenco", "Jilotepec", "Jilotzingo", "Jocotitlán", "Lerma", "Melchor Ocampo", "Metepec", "Morelos", "Naucalpan de Juárez", 
+    "Nezahualcóyotl", "Nicolás Romero", "Ocoyoacac", "La Paz", "Polotitlán", "San Felipe del Progreso", "San Martín de las Pirámides", "San Mateo Atenco", 
+    "Santo Tomás", "Tecámac", "Tejupilco", "Temascalapa", "Temascalcingo", "Teoloyucan", "Teotihuacán", "Tepotzotlán", "Tequixquiac", "Texcoco", 
+    "Tezoyuca", "Tlalnepantla de Baz", "Toluca", "Tultepec", "Tultitlán", "Valle de Bravo", "Villa del Carbón", "Villa Guerrero", "Villa Victoria", "Zumpango", 
+    "Cuautitlán Izcalli"
+  ];
 
   String country = "Mexico";
   String state = "Mexico City";
-  String city = "";
+  String city = "Alvaro Obregon";
 
-  String validateForm(BuildContext context, AdressUsecase usecase){
-    if(usecase.address.text.isEmpty || usecase.country.isEmpty || usecase.zip.text.isEmpty){
-      return "Completa todos los campos!";
-    }
-    if(usecase.alias.text.isEmpty){
-      return "Agrega un alias para identificar tu dirección!";
-    }
-    if(usecase.zip.text.length != 5){
-      return "Código postal invalido, revisa e intenta de nuevo";
-    }
-    if(usecase.address.text.length < 6){
-      return "Agrega una dirección válida";
-    }
-    return "";
-  }
+  // String validateForm(BuildContext context, AdressUsecase usecase){
+  //   if(usecase.address.text.isEmpty || usecase.country.isEmpty || usecase.zip.text.isEmpty){
+  //     return "Completa todos los campos!";
+  //   }
+  //   if(usecase.alias.text.isEmpty){
+  //     return "Agrega un alias para identificar tu dirección!";
+  //   }
+  //   if(usecase.zip.text.length != 5){
+  //     return "Código postal invalido, revisa e intenta de nuevo";
+  //   }
+  //   if(usecase.address.text.length < 6){
+  //     return "Agrega una dirección válida";
+  //   }
+  //   return "";
+  // }
 
   void cleanForm(){
     alias.clear();
     address.clear();
     zip.clear();
-    country = "";
-    state = "";
-    city = "";
+    country = "Mexico";
+    state = "Mexico City";
+    city = "Alvaro Obregon";
   }
 
   Future<Position> determinePosition(BuildContext context) async {

@@ -10,9 +10,11 @@ class FormValidatorState extends Equatable {
 final class FormValidatorInitial extends FormValidatorState {}
 
 class AprovedFormState extends FormValidatorState{
+  final DateTime date;
+  const AprovedFormState(this.date);
 
   @override 
-  List<Object> get props => [];
+  List<Object> get props => [date];
 }
 
 class InputCheckedState extends FormValidatorState{
