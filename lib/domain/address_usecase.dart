@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/presentation/pages/shared/alert_dialog_widget.dart';
 
 class AdressUsecase{
   bool hasInternet = false;
+  bool isLightMode = true;
+  var mainColor = mainTheme;
 
   final TextEditingController _alias = TextEditingController();
   TextEditingController get alias => _alias;

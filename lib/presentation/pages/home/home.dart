@@ -4,6 +4,7 @@ import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/domain/home_functions.dart';
+import 'package:p2_address_crud/main.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
 import 'package:p2_address_crud/presentation/pages/address_form/new_adress_form.dart';
 import 'package:p2_address_crud/presentation/pages/address_list/address_list.dart';
@@ -11,7 +12,9 @@ import 'package:p2_address_crud/presentation/pages/shared/main_action_button.dar
 import 'package:p2_address_crud/presentation/pages/shared/title_widget.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  Home({super.key, required this.adressUsecase});
+
+  AdressUsecase adressUsecase;
 
   @override
   State<Home> createState() => _HomeState();
@@ -27,15 +30,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    AdressUsecase adressUsecase = AdressUsecase();
     AddressModel addressModel = const AddressModel(id: 0, alias: "", country: "", state: "", city: "", address: "", zip: "", dateCreated: "", dateUpdated: "");
     return BlocConsumer<SqliteManagerBloc, SqliteManagerState>(
       listener: (context, state) {
-        manageDataBaseResponse(context, state, adressUsecase);
+        manageDataBaseResponse(context, state, widget.adressUsecase);
       },
       builder: (context, state) {
         return Container(
-          color: mainTheme.colorScheme.background,
+          color: usecase.mainColor.colorScheme.background,
           height: double.maxFinite,
           width: double.maxFinite,
           child: RefreshIndicator(
@@ -48,7 +50,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 10,
                 ),
-                adressUsecase.data.isEmpty ?
+                widget.adressUsecase.data.isEmpty ?
                 Container(
                   alignment: Alignment.center,
                   child: Column(
@@ -63,7 +65,7 @@ class _HomeState extends State<Home> {
                 )
                 : 
                 AdressList(
-                  addressUsecase: adressUsecase,
+                  addressUsecase: widget.adressUsecase,
                 ),
                 const SizedBox(
                   height: 20,
@@ -72,13 +74,13 @@ class _HomeState extends State<Home> {
                   text: "Nueva Dirección",
                   bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                   action: () {
-                    adressUsecase.cleanForm();
+                    widget.adressUsecase.cleanForm();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => NewAdressForm(
                           addressModel: addressModel,
-                          addressUsecase: adressUsecase,
+                          addressUsecase: widget.adressUsecase,
                           isEditMode: false,
                         )
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
+import 'package:p2_address_crud/main.dart';
 import 'package:p2_address_crud/presentation/pages/address_list/components/card_content.dart';
 import 'package:p2_address_crud/presentation/pages/address_list/components/card_details.dart';
 import 'package:p2_address_crud/presentation/pages/shared/title_widget.dart';
@@ -25,7 +26,7 @@ class CardItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 1, color: const Color.fromARGB(255, 67, 67, 67),)
+          border: Border.all(width: 1, color: addressUsecase.mainColor.colorScheme.primary)
         ),
         child: Stack(
           children: [
@@ -34,13 +35,13 @@ class CardItem extends StatelessWidget {
               height: 32,
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: mainTheme.colorScheme.primary,
+                color: addressUsecase.mainColor.colorScheme.primary,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10.0),
                   bottomRight:Radius.circular(10.0),
                 )
               ),
-              child: TitleWidget(text: addressUsecase.data[index].alias.toString(), style: mainTheme.textTheme.titleMedium!.copyWith(color: mainTheme.colorScheme.onPrimary, fontSize: 12),)
+              child: TitleWidget(text: addressUsecase.data[index].alias.toString(), style: mainTheme.textTheme.titleMedium!.copyWith(color: usecase.mainColor.colorScheme.onPrimary, fontSize: 12),)
             ),
             CardContent(addressUsecase: addressUsecase, addressModel: addressUsecase.data[index],),
           ],

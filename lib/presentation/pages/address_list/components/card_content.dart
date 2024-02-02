@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
+import 'package:p2_address_crud/main.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
 import 'package:p2_address_crud/presentation/pages/address_form/new_adress_form.dart';
 import 'package:p2_address_crud/presentation/pages/shared/body_widget.dart';
@@ -64,10 +65,6 @@ class CardContent extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: mainTheme.colorScheme.background,
-                    borderRadius: BorderRadius.circular(10)
-                    ),
                   child: const Icon(Icons.delete, color: Color.fromARGB(255, 139, 38, 38),)
                 ),
               ),
@@ -76,7 +73,7 @@ class CardContent extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: BodyWidget(text: addressModel.address, style: mainTheme.textTheme.bodyMedium!.copyWith(fontSize: 15))
+            child: BodyWidget(text: addressModel.address, style: mainTheme.textTheme.bodyMedium!.copyWith(fontSize: 15, color: usecase.mainColor.colorScheme.primary))
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +82,7 @@ class CardContent extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                child: BodyWidget(text: addressModel.dateUpdated, style: mainTheme.textTheme.bodyMedium!.copyWith(fontSize: 12, color: mainTheme.colorScheme.onSurface),),
+                child: BodyWidget(text: addressModel.dateUpdated, style: mainTheme.textTheme.bodyMedium!.copyWith(fontSize: 12, color: usecase.mainColor.colorScheme.onSurface),),
               ),
             
               InkWell(
@@ -98,11 +95,7 @@ class CardContent extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: mainTheme.colorScheme.background,
-                    borderRadius: BorderRadius.circular(10)
-                    ),
-                  child: const Icon(Icons.edit, color: Color.fromARGB(255, 67, 67, 67),)
+                  child: Icon(Icons.edit, color: addressUsecase.mainColor.colorScheme.primary)
                 ),
               ),
             ],
