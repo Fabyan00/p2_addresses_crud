@@ -19,11 +19,13 @@ void main() {
       BlocProvider(create: (_) => FormValidatorCubit()),
       BlocProvider(create: (_) => CitiesDropdownCubit()),
     ],
-    child: const MyApp()));
+    child:  MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
+
+  var mainColor = AdressUsecase().mainColor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +36,8 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const TitleWidget(text: "Agenda de Direcciones", fontColor: Colors.black),
-          backgroundColor: AdressUsecase().mainColor
+          title: TitleWidget(text: "Tus Direcciones", fontColor: mainColor.primaryColor),
+          backgroundColor: mainColor.backgroundColor
         ),
         body: const Home(),
       )

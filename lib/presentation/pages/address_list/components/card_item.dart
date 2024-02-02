@@ -30,11 +30,11 @@ class CardItem extends StatelessWidget {
           children: [
             Container(
               width: 200,
-              height: 30,
+              height: 32,
               padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: addressUsecase.mainColor.primaryColor,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10.0),
                   bottomRight:Radius.circular(10.0),
                 )

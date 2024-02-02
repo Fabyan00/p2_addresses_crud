@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/pages/address_form/new_adress_form.dart';
@@ -29,49 +28,49 @@ class CardDetails extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 20,),
-                const TitleWidget(text: "Detalles:", fontSize: 20, fontColor: Colors.black,),
-                CustomDivider(),
+                TitleWidget(text: "Detalles:", fontSize: 20, fontColor: addressUsecase.mainColor.primaryColor,),
+                const CustomDivider(),
                 const SizedBox(height: 10,),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BodyWidget(text: "Alias: " + addressModel.alias, fontColor: Colors.black,),
-                      CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                      BodyWidget(text: "Alias: ${addressModel.alias}", fontColor: addressUsecase.mainColor.primaryColor,),
+                      const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                       const SizedBox(height: 10,),
-                      BodyWidget(text: "País: " + addressModel.country, fontColor: Colors.black,),
-                      CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                      BodyWidget(text: "País: ${addressModel.country}", fontColor: addressUsecase.mainColor.primaryColor,),
+                      const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                       const SizedBox(height: 10,),
                       Visibility(
                         visible: addressModel.state.isNotEmpty,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            BodyWidget(text: "Estado: " + addressModel.state, fontColor: Colors.black,),
-                            CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                            BodyWidget(text: "Estado: ${addressModel.state}", fontColor: addressUsecase.mainColor.primaryColor,),
+                            const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                             const SizedBox(height: 10,),
                           ],
                         ),
                       ),
 
-                      BodyWidget(text: "Ciudad: " + addressModel.city, fontColor: Colors.black,),
-                      CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                      BodyWidget(text: "Ciudad: ${addressModel.city}", fontColor: addressUsecase.mainColor.primaryColor,),
+                      const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                       const SizedBox(height: 10,),
 
-                      BodyWidget(text: "Dirección: " + addressModel.address, fontColor: Colors.black,),
-                      CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                      BodyWidget(text: "Dirección: ${addressModel.address}", fontColor: addressUsecase.mainColor.primaryColor,),
+                      const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                       const SizedBox(height: 10,),
 
-                      BodyWidget(text: "Código Postal: " + addressModel.zip, fontColor: Colors.black,),
-                      CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                      BodyWidget(text: "Código Postal: ${addressModel.zip}", fontColor: addressUsecase.mainColor.primaryColor,),
+                      const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                       const SizedBox(height: 10,),
 
-                      BodyWidget(text: "Guardado: " + addressModel.dateCreated, fontColor: Colors.black,),
-                      CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                      BodyWidget(text: "Guardado: ${addressModel.dateCreated}", fontColor: addressUsecase.mainColor.primaryColor,),
+                      const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                       const SizedBox(height: 10,),
-                      BodyWidget(text: "Actualizado: " + addressModel.dateUpdated, fontColor: Colors.black,),
-                      CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
+                      BodyWidget(text: "Actualizado: ${addressModel.dateUpdated}", fontColor: addressUsecase.mainColor.primaryColor,),
+                      const CustomDivider(color: Color.fromARGB(82, 67, 67, 67), height: 15,),
                     ],
                   ),
                 ),

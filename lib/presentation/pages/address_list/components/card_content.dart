@@ -39,7 +39,7 @@ class CardContent extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const TitleWidget(text: "¿Seguro que desea eliminar esta dirección?", fontColor: Colors.black,),
+                          TitleWidget(text: "¿Seguro que desea eliminar esta dirección?", fontColor: addressUsecase.mainColor.primaryColor,),
                           const SizedBox(height: 10,),
                           MainActionButton(
                             text: "Eliminar", 
@@ -62,7 +62,7 @@ class CardContent extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AdressUsecase().mainColor,
+                    color: addressUsecase.mainColor.backgroundColor,
                     borderRadius: BorderRadius.circular(10)
                     ),
                   child: const Icon(Icons.delete, color: Color.fromARGB(255, 139, 38, 38),)
@@ -73,7 +73,7 @@ class CardContent extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: BodyWidget(text: addressModel.address, fontSize: 15, fontColor: Colors.black,)
+            child: BodyWidget(text: addressModel.address, fontSize: 15, fontColor: addressUsecase.mainColor.primaryColor,)
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,7 +96,7 @@ class CardContent extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AdressUsecase().mainColor,
+                    color: addressUsecase.mainColor.backgroundColor,
                     borderRadius: BorderRadius.circular(10)
                     ),
                   child: const Icon(Icons.edit, color: Color.fromARGB(255, 67, 67, 67),)

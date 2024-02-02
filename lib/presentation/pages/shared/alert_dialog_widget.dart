@@ -10,7 +10,7 @@ class AlertDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AdressUsecase().mainColor,
+      backgroundColor: AdressUsecase().mainColor.backgroundColor,
       content: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15)
