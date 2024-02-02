@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/domain/form_functions.dart';
+import 'package:p2_address_crud/domain/location_functions.dart';
 import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
 import 'package:p2_address_crud/presentation/cubit/cities_drop_down/cities_dropdown_cubit.dart';
@@ -45,9 +47,9 @@ class NewAdressForm extends StatelessWidget {
         appBar: AppBar(
           title: TitleWidget(
             text: isEditMode ? "Modificar Dirección" : "Agregar Dirección",
-            fontColor: addressUsecase.mainColor.primaryColor,
+             style: mainTheme.textTheme.titleMedium!,
           ),
-          backgroundColor: addressUsecase.mainColor.backgroundColor
+          backgroundColor: mainTheme.colorScheme.background
         ),
         body: BlocConsumer<PlaceBloc, PlaceState>(
           listener: (context, state) async {
@@ -65,7 +67,7 @@ class NewAdressForm extends StatelessWidget {
                   },
                   builder: (context, state) {
                     return Container(
-                      color: addressUsecase.mainColor.backgroundColor,
+                      color: mainTheme.colorScheme.background,
                       height: double.maxFinite,
                       width: double.maxFinite,
                       child: SingleChildScrollView(
@@ -79,11 +81,12 @@ class NewAdressForm extends StatelessWidget {
                                 ),
                                 MainActionButton(
                                   text: "Usar mi ubicación",
+                                  bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                                   action: ()async{
                                     bool hasInternet = await InternetConnection().hasInternetAccess;
                                     if(hasInternet){
                                       if(!context.mounted) return;
-                                      addressUsecase.determinePosition(context);
+                                      determinePosition(context);
                                     }else{
                                       if(!context.mounted) return;
                                       addressUsecase.showAlert(
@@ -92,15 +95,16 @@ class NewAdressForm extends StatelessWidget {
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const TitleWidget(
+                                              TitleWidget(
                                                 text: "Revisa tu conexión a internet para obtener tu ubicación",
-                                                fontColor: Colors.black54,
+                                                 style: mainTheme.textTheme.titleMedium!,
                                               ),
                                               const SizedBox(
                                                 height: 10,
                                               ),
                                               MainActionButton(
                                                 text: "Ajustes", 
+                                                bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                                                 action: (){
                                                   AppSettings.openAppSettings(type: AppSettingsType.wifi);
                                                 }
@@ -109,7 +113,8 @@ class NewAdressForm extends StatelessWidget {
                                                 height: 10,
                                               ),
                                               MainActionButton(
-                                                text: "Cancelar", 
+                                                text: "Cerrar", 
+                                                bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                                                 action: () => Navigator.pop(context)
                                               )
                                             ],
@@ -189,6 +194,7 @@ class NewAdressForm extends StatelessWidget {
                             ),
                             MainActionButton(
                               text: isEditMode ? "Modificar" : "Guardar",
+                              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                               action: () {
                                 BlocProvider.of<FormValidatorCubit>(context).validateInput(addressUsecase);
                               }
@@ -202,6 +208,7 @@ class NewAdressForm extends StatelessWidget {
                                   ),
                                   MainActionButton(
                                     text: "Eliminar",
+                                    bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                                     action: () {
                                       addressUsecase.showAlert(
                                         context,
@@ -211,16 +218,17 @@ class NewAdressForm extends StatelessWidget {
                                             children: [
                                               TitleWidget(
                                                 text: "¿Seguro que desea eliminar esta dirección?",
-                                                fontColor: addressUsecase.mainColor.primaryColor,
+                                                style: mainTheme.textTheme.titleMedium!,
                                               ),
                                               const SizedBox(
                                                 height: 10,
                                               ),
                                               MainActionButton(
                                                 text: "Eliminar",
+                                                bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                                                 action: () {
                                                   BlocProvider.of< SqliteManagerBloc>(context).add(
-                                                    DeleteElementEvent(addressModel.id, false)
+                                                    DeleteElementEvent(addressModel.id, true)
                                                   );
                                                 }
                                               ),
@@ -229,6 +237,7 @@ class NewAdressForm extends StatelessWidget {
                                               ),
                                               MainActionButton(
                                                 text: "Cancelar",
+                                                bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                                                 action: () {
                                                   Navigator.pop(context);
                                                 }
@@ -248,6 +257,7 @@ class NewAdressForm extends StatelessWidget {
                             ),
                             MainActionButton(
                               text: "Cancelar",
+                              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                               action: () => Navigator.pop(context)
                             ),
                             const SizedBox(

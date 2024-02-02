@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:p2_address_crud/domain/address_usecase.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
 import 'package:p2_address_crud/presentation/cubit/cities_drop_down/cities_dropdown_cubit.dart';
@@ -25,19 +25,14 @@ void main() {
 class MyApp extends StatelessWidget {
    MyApp({super.key});
 
-  var mainColor = AdressUsecase().mainColor;
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
       home: Scaffold(
         appBar: AppBar(
-          title: TitleWidget(text: "Tus Direcciones", fontColor: mainColor.primaryColor),
-          backgroundColor: mainColor.backgroundColor
+          title: TitleWidget(text: "Tus Direcciones", style: mainTheme.textTheme.titleMedium!,),
+          backgroundColor: mainTheme.colorScheme.background
         ),
         body: const Home(),
       )

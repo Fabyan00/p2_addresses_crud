@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
 import 'package:p2_address_crud/presentation/pages/shared/main_action_button.dart';
@@ -14,7 +15,7 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleWidget(text: state.message, fontColor: Colors.black54,),
+            TitleWidget(text: state.message, style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 15)),
             const SizedBox(height: 10,),
             const CircularProgressIndicator(color: Colors.black54,),
           ],
@@ -37,10 +38,11 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleWidget(text: state.message, fontColor: adressUsecase.mainColor.primaryColor,),
+            TitleWidget(text: state.message, style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 15)),
             const SizedBox(height: 10,),
             MainActionButton(
               text: "Aceptar", 
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: (){
               Navigator.pop(context);
             })
@@ -65,10 +67,11 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleWidget(text: state.message, fontColor: adressUsecase.mainColor.primaryColor,),
+            TitleWidget(text: state.message, style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 15)),
             const SizedBox(height: 10,),
             MainActionButton(
               text: "Aceptar", 
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: (){
               Navigator.pop(context);
             })
@@ -94,10 +97,11 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleWidget(text: state.message, fontColor: adressUsecase.mainColor.primaryColor),
+            TitleWidget(text: state.message, style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 15)),
             const SizedBox(height: 10,),
             MainActionButton(
               text: "Aceptar", 
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: (){
               Navigator.pop(context);
             })
@@ -116,10 +120,11 @@ void manageDataBaseResponse(BuildContext context, SqliteManagerState state, Adre
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitleWidget(text: state.message, fontColor: adressUsecase.mainColor.primaryColor),
+            TitleWidget(text: state.message, style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 15)),
             const SizedBox(height: 10,),
             MainActionButton(
               text: "Aceptar", 
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: (){
               SystemNavigator.pop();
             })

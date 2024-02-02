@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/domain/home_functions.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
@@ -34,7 +35,7 @@ class _HomeState extends State<Home> {
       },
       builder: (context, state) {
         return Container(
-          color: adressUsecase.mainColor.backgroundColor,
+          color: mainTheme.colorScheme.background,
           height: double.maxFinite,
           width: double.maxFinite,
           child: RefreshIndicator(
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
                   child: Column(
                     children: [
                       const SizedBox(height: 200,),
-                      TitleWidget(text: "No has guardado ninguna dirección aún", fontColor: adressUsecase.mainColor.primaryColor, fontSize: 15,),
+                      TitleWidget(text: "No has guardado ninguna dirección aún", style: mainTheme.textTheme.titleMedium!,),
                       const SizedBox(height: 25,),
                       const Icon(Icons.sentiment_neutral_outlined, size: 50,),
                       const SizedBox(height: 250,)
@@ -67,9 +68,9 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 20,
                 ),
-                	
                 MainActionButton(
                   text: "Nueva Dirección",
+                  bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                   action: () {
                     adressUsecase.cleanForm();
                     Navigator.push(

@@ -11,7 +11,7 @@ class MxCitiesDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       child: Column(
         children: [
           DropdownSearch<String>(

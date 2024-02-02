@@ -20,7 +20,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
     });
 
     on<SetErrorLocationEvent>((event, emit) {
-      emit(FailedSettingUserLocation(event.message));
+      emit(FailedSettingUserLocation(event.message, DateTime.now()));
     });
   }
 }

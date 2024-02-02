@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/pages/address_list/components/card_content.dart';
 import 'package:p2_address_crud/presentation/pages/address_list/components/card_details.dart';
@@ -33,13 +34,13 @@ class CardItem extends StatelessWidget {
               height: 32,
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: addressUsecase.mainColor.primaryColor,
+                color: mainTheme.colorScheme.primary,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10.0),
                   bottomRight:Radius.circular(10.0),
                 )
               ),
-              child: TitleWidget(text: addressUsecase.data[index].alias.toString(), fontColor: Colors.white, fontSize: 12,)
+              child: TitleWidget(text: addressUsecase.data[index].alias.toString(), style: mainTheme.textTheme.titleMedium!.copyWith(color: mainTheme.colorScheme.onPrimary, fontSize: 12),)
             ),
             CardContent(addressUsecase: addressUsecase, addressModel: addressUsecase.data[index],),
           ],

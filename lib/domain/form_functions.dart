@@ -1,8 +1,8 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/bloc/place/place_bloc.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
@@ -22,14 +22,14 @@ void manageFormState(int id, BuildContext context, AdressUsecase addressUsecase,
             children: [
               TitleWidget(
                 text: state.message,
-                fontSize: 20,
-                fontColor: Colors.black54,
+                style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 15),
               ),
               const SizedBox(
                 height: 40,
               ),
               MainActionButton(
                 text: "Accept",
+                bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
                 action: () {
                   Navigator.pop(context);
                 },
@@ -84,18 +84,18 @@ void manageUserLocationResponse(BuildContext context, PlaceState state, AdressUs
   if (state is LoadingState) {
     adressUsecase.showAlert(
       context,
-      const Center(
+      Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TitleWidget(
               text: "Obteniendo ubicación. . .",
-              fontColor: Colors.black54,
+              style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 15),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            CircularProgressIndicator(
+            const CircularProgressIndicator(
               color: Colors.black54,
             ),
           ],
@@ -125,14 +125,14 @@ void manageUserLocationResponse(BuildContext context, PlaceState state, AdressUs
           children: [
             TitleWidget(
               text: state.message,
-              fontSize: 20,
-              fontColor: Colors.black54,
+              style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 18),
             ),
             const SizedBox(
               height: 10,
             ),
             MainActionButton(
               text: "Ajustes",
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: () {
                 Navigator.pop(context);
                 AppSettings.openAppSettings(type: AppSettingsType.location);
@@ -140,7 +140,8 @@ void manageUserLocationResponse(BuildContext context, PlaceState state, AdressUs
             ),
             const SizedBox(height: 10,),
             MainActionButton(
-              text: "Cancelar",
+              text: "Cerrar",
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: () {
                 Navigator.pop(context);
               },
@@ -148,12 +149,11 @@ void manageUserLocationResponse(BuildContext context, PlaceState state, AdressUs
           ],
         )
       ),
-      250
+      300
     );
   }
 
   if (state is FailedSettingUserLocation) {
-    Navigator.pop(context);
     adressUsecase.showAlert(
       context,
       Center(
@@ -162,22 +162,22 @@ void manageUserLocationResponse(BuildContext context, PlaceState state, AdressUs
           children: [
             TitleWidget(
               text: state.message,
-              fontSize: 20,
-              fontColor: Colors.black54,
+              style: mainTheme.textTheme.titleMedium!.copyWith(fontSize: 18),
             ),
             const SizedBox(
               height: 10,
             ),
             MainActionButton(
               text: "Ajustes",
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: () {
-                Navigator.pop(context);
                 AppSettings.openAppSettings(type: AppSettingsType.location);
               },
             ),
             const SizedBox(height: 10,),
             MainActionButton(
-              text: "Cancelar",
+              text: "Cerrar",
+              bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
               action: () {
                 Navigator.pop(context);
               },

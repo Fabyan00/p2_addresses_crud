@@ -2,6 +2,7 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
 import 'package:p2_address_crud/presentation/cubit/cities_drop_down/cities_dropdown_cubit.dart';
 
@@ -14,11 +15,9 @@ class CountryStateCityInput extends StatelessWidget {
   Widget build(BuildContext context) {
      return Container(
        margin: const EdgeInsets.symmetric(horizontal: 10),
+      //  decoration: inputFormDecoration,
        child: CSCPicker(
-         selectedItemStyle: GoogleFonts.raleway(
-         textStyle: const TextStyle(
-           fontSize: 15,)  
-         ),
+         selectedItemStyle: mainTheme.textTheme.bodyMedium!.copyWith(fontSize: 15),
          currentCountry: addressUsecase.country,
          currentState: "Mexico City",
          flagState: CountryFlag.DISABLE,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p2_address_crud/data/theme.dart';
 
 class InputTextWidget extends StatelessWidget {
   InputTextWidget({
@@ -18,10 +19,7 @@ class InputTextWidget extends StatelessWidget {
       width: width,
       height: height,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: const Color.fromARGB(255, 226, 224, 224),
-      ),
+      decoration: inputFormDecoration,
       child: TextField(
         maxLength: 50,
         controller: controller,
@@ -29,14 +27,8 @@ class InputTextWidget extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 5),
           border: InputBorder.none,
           hintText: hintText,
-          counterStyle: const TextStyle(
-            fontSize: 10,
-            color: Color.fromARGB(123, 0, 0, 0)
-          ),
-          hintStyle: const TextStyle(
-            fontSize: 15,
-            color: Colors.black54
-          )
+          counterStyle: inputHintStyle,
+          hintStyle: inputHintStyle.copyWith(fontSize: 15)
         ),
       ),
     );
