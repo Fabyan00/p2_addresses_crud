@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:p2_address_crud/domain/address_usecase.dart';
+import 'package:p2_address_crud/data/theme.dart';
 
 class AlertDialogWidget extends StatelessWidget {
   const AlertDialogWidget({super.key, required this.content, this.height = 200});
@@ -10,7 +10,7 @@ class AlertDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AdressUsecase().mainColor,
+      backgroundColor: mainTheme.colorScheme.background,
       content: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15)

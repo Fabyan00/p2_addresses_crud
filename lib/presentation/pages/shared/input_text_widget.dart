@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p2_address_crud/data/theme.dart';
 
 class InputTextWidget extends StatelessWidget {
   InputTextWidget({
@@ -6,7 +7,7 @@ class InputTextWidget extends StatelessWidget {
     required this.controller,
     this.width = 300,
     this.height = 42,
-    this.hintText = ""
+    this.hintText = "",
   });
 
   final TextEditingController controller;
@@ -17,20 +18,17 @@ class InputTextWidget extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: const Color.fromARGB(255, 226, 224, 224)
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      decoration: inputFormDecoration,
       child: TextField(
         maxLength: 50,
         controller: controller,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
           border: InputBorder.none,
           hintText: hintText,
-          hintStyle: TextStyle(
-            fontSize: 15,
-          )
+          counterStyle: inputHintStyle,
+          hintStyle: inputHintStyle.copyWith(fontSize: 15)
         ),
       ),
     );

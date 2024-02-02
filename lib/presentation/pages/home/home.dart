@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:p2_address_crud/data/models/address_model.dart';
+import 'package:p2_address_crud/data/theme.dart';
 import 'package:p2_address_crud/domain/address_usecase.dart';
+import 'package:p2_address_crud/domain/home_functions.dart';
 import 'package:p2_address_crud/presentation/bloc/sqlite_manager/sqlite_manager_bloc.dart';
 import 'package:p2_address_crud/presentation/pages/address_form/new_adress_form.dart';
 import 'package:p2_address_crud/presentation/pages/address_list/address_list.dart';
@@ -17,8 +18,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
   @override
-  void initState() {
+  void initState(){
     BlocProvider.of<SqliteManagerBloc>(context).add(SetDatabaseInitialization());
     super.initState();
   }
@@ -33,7 +35,7 @@ class _HomeState extends State<Home> {
       },
       builder: (context, state) {
         return Container(
-          color: const Color.fromARGB(255, 214, 214, 214),
+          color: mainTheme.colorScheme.background,
           height: double.maxFinite,
           width: double.maxFinite,
           child: RefreshIndicator(
@@ -49,13 +51,13 @@ class _HomeState extends State<Home> {
                 adressUsecase.data.isEmpty ?
                 Container(
                   alignment: Alignment.center,
-                  child: const Column(
+                  child: Column(
                     children: [
-                      SizedBox(height: 200,),
-                      TitleWidget(text: "No has guardado ninguna dirección aún", fontColor: Colors.black, fontSize: 15,),
-                      SizedBox(height: 25,),
-                      Icon(Icons.sentiment_neutral_outlined, size: 50,),
-                      SizedBox(height: 250,)
+                      const SizedBox(height: 200,),
+                      TitleWidget(text: "No has guardado ninguna dirección aún", style: mainTheme.textTheme.titleMedium!,),
+                      const SizedBox(height: 25,),
+                      const Icon(Icons.sentiment_neutral_outlined, size: 50,),
+                      const SizedBox(height: 250,)
                     ]
                   ),
                 )
@@ -66,151 +68,28 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 20,
                 ),
-                	
                 MainActionButton(
-                    text: "Nueva Dirección",
-                    action: () {
-                      adressUsecase.cleanForm();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NewAdressForm(
-                              addressModel: addressModel,
-                              addressUsecase: adressUsecase,
-                              isEditMode: false,
-                            )),
-                      );
-                    })
+                  text: "Nueva Dirección",
+                  bodyStyle: mainTheme.textTheme.bodyMedium!.copyWith(color: mainTheme.colorScheme.onPrimary),
+                  action: () {
+                    adressUsecase.cleanForm();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewAdressForm(
+                          addressModel: addressModel,
+                          addressUsecase: adressUsecase,
+                          isEditMode: false,
+                        )
+                      ),
+                    );
+                  }
+                )
               ],
             ),
           ),
         );
       },
-    );
-  }
-}
-
-void manageDataBaseResponse(BuildContext context, SqliteManagerState state, AdressUsecase adressUsecase){
-  if(state is LoadingDBState){
-    adressUsecase.showAlert(
-      context,
-      Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TitleWidget(text: state.message, fontColor: Colors.black54,),
-            const SizedBox(height: 10,),
-            const CircularProgressIndicator(color: Colors.black54,),
-          ],
-        ),
-      ),
-      200
-    );
-  }
-  if(state is SucceedInitializingDataBaseState){
-    Navigator.pop(context);
-    adressUsecase.data = state.modelList;
-  }
-
-  if(state is SucceedCreatingElementState){
-    adressUsecase.cleanForm();
-    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-    adressUsecase.showAlert(
-      context, 
-      Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TitleWidget(text: state.message, fontColor: Colors.black,),
-            const SizedBox(height: 10,),
-            MainActionButton(
-              text: "Aceptar", 
-              action: (){
-              Navigator.pop(context);
-            })
-          ],
-        ),
-      ), 
-      200
-    );
-    BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
-  }
-
-  if(state is SucceedFetchingDataState){
-    Navigator.pop(context);
-    adressUsecase.data = state.modelList;
-  } 
-
-  if(state is SucceedUpdatingElementState){
-    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-    adressUsecase.showAlert(
-      context, 
-      Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TitleWidget(text: state.message, fontColor: Colors.black,),
-            const SizedBox(height: 10,),
-            MainActionButton(
-              text: "Aceptar", 
-              action: (){
-              Navigator.pop(context);
-            })
-          ],
-        ),
-      ), 
-      200
-    );
-    BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
-  }
-
-  if(state is SucceedDeletingElementState){
-    adressUsecase.cleanForm();
-    if(state.isFromModifyScreen){
-      Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-    }else{
-      Navigator.pop(context);
-      Navigator.pop(context);
-    }
-    adressUsecase.showAlert(
-      context, 
-      Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TitleWidget(text: state.message, fontColor: Colors.black,),
-            const SizedBox(height: 10,),
-            MainActionButton(
-              text: "Aceptar", 
-              action: (){
-              Navigator.pop(context);
-            })
-          ],
-        ),
-      ), 
-      200
-    );
-    BlocProvider.of<SqliteManagerBloc>(context).add(FetchDataEvent());
-  }
-
-  if(state is FailedInitializingDataBaseState){
-    adressUsecase.showAlert(
-      context, 
-      Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TitleWidget(text: state.message, fontColor: Colors.black,),
-            const SizedBox(height: 10,),
-            MainActionButton(
-              text: "Aceptar", 
-              action: (){
-              SystemNavigator.pop();
-            })
-          ],
-        ),
-      ), 
-      200
     );
   }
 }

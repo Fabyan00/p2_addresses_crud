@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:p2_address_crud/data/theme.dart';
 
 class InputNumberWidget extends StatelessWidget {
   InputNumberWidget({
@@ -7,7 +8,7 @@ class InputNumberWidget extends StatelessWidget {
     required this.controller,
     this.width = 200,
     this.height = 42,
-    this.hintText = ""
+    this.hintText = "",
   });
 
   final TextEditingController controller;
@@ -18,10 +19,8 @@ class InputNumberWidget extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      decoration: BoxDecoration(
-         borderRadius: BorderRadius.circular(10),
-        color: const Color.fromARGB(255, 226, 224, 224)
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
+      decoration: inputFormDecoration,
       child: TextField(
         maxLength: 5,
         keyboardType: TextInputType.number,
@@ -30,12 +29,11 @@ class InputNumberWidget extends StatelessWidget {
         ],
         controller: controller,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
           border: InputBorder.none,
           hintText: hintText,
-          hintStyle: const TextStyle(
-            fontSize: 15,
-          )
+          counterStyle: inputHintStyle,
+          hintStyle: inputHintStyle.copyWith(fontSize: 14)
         ),
       ),
     );

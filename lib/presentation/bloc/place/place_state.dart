@@ -36,9 +36,9 @@ final class FailedSettingPlace extends PlaceState{
 
 final class FailedSettingUserLocation extends PlaceState{
   final String message;
-
-  const FailedSettingUserLocation(this.message);
+  final DateTime date;
+  const FailedSettingUserLocation(this.message, this.date);
 
   @override 
-  List<Object> get props => [message];
+  List<Object> get props => [message, date];
 }
